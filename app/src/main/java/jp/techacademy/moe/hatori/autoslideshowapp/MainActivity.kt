@@ -52,18 +52,40 @@ class MainActivity : AppCompatActivity() {
 
         //再生ボタン実装
         start_button.setOnClickListener {
+
             if (mTimer == null){
+
                 mTimer = Timer()
+
+                start_button.text = "停止"
+                prev_button.isClickable = false
+                next_button.isClickable = false
+
                 mTimer!!.schedule(object : TimerTask() {
                     override fun run() {
-                        mTimerSec += 1
+
+                        Nowindex += 1
+                        if (Nowindex == picURLInfo.count()){
+                            Nowindex = 0
+                        }
+
                         mHandler.post {
-                            timer.text = String.format("%.1f", mTimerSec)
+                            imageView.setImageURI(picURLInfo[Nowindex])
                         }
                     }
-                }, 1000, 1000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
+                }, 2000, 2000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
+
+            } else{
+
+                mTimer!!.cancel()
+                mTimer = null
+
+                start_button.text = "再生"
+                prev_button.isClickable = true
+                next_button.isClickable = true
+
             }
-            //imageView.setImageURI(picURLInfo[1])
+
         }
 
         //進むボタンが押されたときの処理
@@ -95,21 +117,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
-
-//        pause_button.setOnClickListener {
-//            if (mTimer != null){
-//                mTimer!!.cancel()
-//                mTimer = null
-//            }
-//        }
-
-
-//        reset_button.setOnClickListener {
-//            mTimerSec = 0.0
-//            timer.text = String.format("%.1f", mTimerSec)
-//        }
-
 
     }
 
