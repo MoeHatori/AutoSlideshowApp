@@ -26,9 +26,6 @@ class MainActivity : AppCompatActivity() {
     //URI配列に指定するためのIndex
     private var Nowindex:Int = 0
 
-    // タイマー用の時間のための変数
-    private var mTimerSec = 0.0
-
     private var mHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,67 +50,84 @@ class MainActivity : AppCompatActivity() {
         //再生ボタン実装
         start_button.setOnClickListener {
 
-            if (mTimer == null){
+            if(picURLInfo.count() == 0 ){
+                error.text = "画像が保存されていません"
+            } else {
+                if (mTimer == null){
 
-                mTimer = Timer()
+                    mTimer = Timer()
 
-                start_button.text = "停止"
-                prev_button.isClickable = false
-                next_button.isClickable = false
+                    start_button.text = "停止"
+                    prev_button.isClickable = false
+                    next_button.isClickable = false
 
-                mTimer!!.schedule(object : TimerTask() {
-                    override fun run() {
+                    mTimer!!.schedule(object : TimerTask() {
+                        override fun run() {
 
-                        Nowindex += 1
-                        if (Nowindex == picURLInfo.count()){
-                            Nowindex = 0
+                            Nowindex += 1
+                            if (Nowindex == picURLInfo.count()){
+                                Nowindex = 0
+                            }
+
+                            mHandler.post {
+                                imageView.setImageURI(picURLInfo[Nowindex])
+                            }
                         }
+                    }, 2000, 2000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
 
-                        mHandler.post {
-                            imageView.setImageURI(picURLInfo[Nowindex])
-                        }
-                    }
-                }, 2000, 2000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
+                } else{
 
-            } else{
+                    mTimer!!.cancel()
+                    mTimer = null
 
-                mTimer!!.cancel()
-                mTimer = null
+                    start_button.text = "再生"
+                    prev_button.isClickable = true
+                    next_button.isClickable = true
 
-                start_button.text = "再生"
-                prev_button.isClickable = true
-                next_button.isClickable = true
+                }
 
             }
+
 
         }
 
         //進むボタンが押されたときの処理
         prev_button.setOnClickListener {
 
-            Nowindex += 1
-            if (Nowindex == picURLInfo.count()){
-                Nowindex = 0
+            if(picURLInfo.count() == 0 ){
+                error.text = "画像が保存されていません"
+            } else {
+                Nowindex += 1
+                if (Nowindex == picURLInfo.count()){
+                    Nowindex = 0
+                }
+                imageView.setImageURI(picURLInfo[Nowindex])
             }
-            imageView.setImageURI(picURLInfo[Nowindex])
+
+
 
         }
 
 
         //戻るボタンが押されたときの処理
         next_button.setOnClickListener {
-            //Nowindexが要素数と一致したときの判定処理
 
-            if (Nowindex == picURLInfo.count()){
-                Nowindex = picURLInfo.count()-1
-            }
-            //Nowindexが０だったときの判定処理
-            if (Nowindex == 0){
-                Nowindex = picURLInfo.count() -1
-                imageView.setImageURI(picURLInfo[Nowindex])
-            }else{
-                Nowindex -= 1
-                imageView.setImageURI(picURLInfo[Nowindex])
+
+            if(picURLInfo.count() == 0 ){
+                error.text = "画像が保存されていません"
+            } else {
+                //Nowindexが要素数と一致したときの判定処理
+                if (Nowindex == picURLInfo.count()){
+                    Nowindex = picURLInfo.count()-1
+                }
+                //Nowindexが０だったときの判定処理
+                if (Nowindex == 0){
+                    Nowindex = picURLInfo.count() -1
+                    imageView.setImageURI(picURLInfo[Nowindex])
+                }else{
+                    Nowindex -= 1
+                    imageView.setImageURI(picURLInfo[Nowindex])
+                }
             }
 
         }

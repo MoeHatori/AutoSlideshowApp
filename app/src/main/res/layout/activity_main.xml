@@ -8,6 +8,13 @@
     android:paddingTop="16dp"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:id="@+id/error"/>
+
+
     <ImageView
         android:layout_width="300dp"
         android:layout_height="200dp"
@@ -41,5 +48,6 @@
             android:text="戻る"
             android:id="@+id/next_button"/>
     </LinearLayout>
+
 
 </RelativeLayout>
