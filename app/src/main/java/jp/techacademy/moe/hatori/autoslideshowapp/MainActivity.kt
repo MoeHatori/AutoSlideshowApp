@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val picURLInfo = ArrayList<Uri>()
 
     private var counter:Int = 0
+    private var ResumeCounter:Int = 0
 
     //URI配列に指定するためのIndex
     private var Nowindex:Int = 0
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         // Android 6.0以降の場合
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -48,6 +50,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             getContentsInfo()
         }
+
+
+
 
 
         //再生ボタン実装
@@ -188,8 +193,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("ANDROID_URI","OnResume")
+        Log.d("ANDROID_URI","OnResume"+ResumeCounter.toString())
+        Log.d("ANDROID_URI","画像数"+picURLInfo.count().toString())
 
+        if (counter != 0){
+            picURLInfo.clear()
+            getContentsInfo()
+            if (picURLInfo.count() == 0 ){
+                imageView.setImageResource(0)
+                Log.d("ANDROID_URI","画像が削除されています")
+            }
+        } else if (counter == 0 && picURLInfo.count() == 0 && ResumeCounter != 0){
+            picURLInfo.clear()
+            error.text = ""
+            getContentsInfo()
+            Log.d("ANDROID_URI","実行されました")
+        }
+        ResumeCounter += 1
 
 
     }
