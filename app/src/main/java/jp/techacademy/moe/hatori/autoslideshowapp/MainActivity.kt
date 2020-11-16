@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     //URIの配列を保存しておく
     private val picURLInfo = ArrayList<Uri>()
 
+    private var counter:Int = 0
+
     //URI配列に指定するためのIndex
     private var Nowindex:Int = 0
 
@@ -64,13 +66,18 @@ class MainActivity : AppCompatActivity() {
                     mTimer!!.schedule(object : TimerTask() {
                         override fun run() {
 
-                            Nowindex += 1
-                            if (Nowindex == picURLInfo.count()){
-                                Nowindex = 0
+                            if ( counter == 0){
+                                counter += 1
+                            } else {
+                                Nowindex += 1
+                                if (Nowindex == picURLInfo.count()){
+                                    Nowindex = 0
+                                }
                             }
 
                             mHandler.post {
                                 imageView.setImageURI(picURLInfo[Nowindex])
+                                Log.d("ANDROID_URI",Nowindex.toString())
                             }
                         }
                     }, 2000, 2000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
@@ -96,12 +103,19 @@ class MainActivity : AppCompatActivity() {
 
             if(picURLInfo.count() == 0 ){
                 error.text = "画像が保存されていません"
-            } else {
+            } else if (counter == 0){
+                imageView.setImageURI(picURLInfo[Nowindex])
+                Log.d("ANDROID_URI",Nowindex.toString())
+                counter += 1
+            }else{
+
                 Nowindex += 1
+                counter += 1
                 if (Nowindex == picURLInfo.count()){
                     Nowindex = 0
                 }
                 imageView.setImageURI(picURLInfo[Nowindex])
+                Log.d("ANDROID_URI",Nowindex.toString())
             }
 
 
@@ -117,6 +131,7 @@ class MainActivity : AppCompatActivity() {
                 error.text = "画像が保存されていません"
             } else {
                 //Nowindexが要素数と一致したときの判定処理
+                counter += 1
                 if (Nowindex == picURLInfo.count()){
                     Nowindex = picURLInfo.count()-1
                 }
@@ -124,9 +139,11 @@ class MainActivity : AppCompatActivity() {
                 if (Nowindex == 0){
                     Nowindex = picURLInfo.count() -1
                     imageView.setImageURI(picURLInfo[Nowindex])
+                    Log.d("ANDROID_URI",Nowindex.toString())
                 }else{
                     Nowindex -= 1
                     imageView.setImageURI(picURLInfo[Nowindex])
+                    Log.d("ANDROID_URI",Nowindex.toString())
                 }
             }
 
