@@ -20,7 +20,11 @@ class MainActivity : AppCompatActivity() {
 
     private var mTimer: Timer? = null
 
+    //URIの配列を保存しておく
     private val picURLInfo = ArrayList<Uri>()
+
+    //URI配列に指定するためのIndex
+    private var Nowindex:Int = 0
 
     // タイマー用の時間のための変数
     private var mTimerSec = 0.0
@@ -46,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             getContentsInfo()
         }
 
+        //再生ボタン実装
         start_button.setOnClickListener {
             if (mTimer == null){
                 mTimer = Timer()
@@ -58,22 +63,52 @@ class MainActivity : AppCompatActivity() {
                     }
                 }, 1000, 1000) // 最初に始動させるまで 100ミリ秒、ループの間隔を 100ミリ秒 に設定
             }
-            imageView.setImageURI(picURLInfo[1])
+            //imageView.setImageURI(picURLInfo[1])
         }
 
+        //進むボタンが押されたときの処理
+        prev_button.setOnClickListener {
 
-        pause_button.setOnClickListener {
-            if (mTimer != null){
-                mTimer!!.cancel()
-                mTimer = null
+            Nowindex += 1
+            if (Nowindex == picURLInfo.count()){
+                Nowindex = 0
             }
+            imageView.setImageURI(picURLInfo[Nowindex])
+
         }
 
 
-        reset_button.setOnClickListener {
-            mTimerSec = 0.0
-            timer.text = String.format("%.1f", mTimerSec)
+        //戻るボタンが押されたときの処理
+        next_button.setOnClickListener {
+            //Nowindexが要素数と一致したときの判定処理
+
+            if (Nowindex == picURLInfo.count()){
+                Nowindex = picURLInfo.count()-1
+            }
+            //Nowindexが０だったときの判定処理
+            if (Nowindex == 0){
+                Nowindex = picURLInfo.count() -1
+                imageView.setImageURI(picURLInfo[Nowindex])
+            }else{
+                Nowindex -= 1
+                imageView.setImageURI(picURLInfo[Nowindex])
+            }
+
         }
+
+
+//        pause_button.setOnClickListener {
+//            if (mTimer != null){
+//                mTimer!!.cancel()
+//                mTimer = null
+//            }
+//        }
+
+
+//        reset_button.setOnClickListener {
+//            mTimerSec = 0.0
+//            timer.text = String.format("%.1f", mTimerSec)
+//        }
 
 
     }
