@@ -49,11 +49,12 @@ class MainActivity : AppCompatActivity() {
             getContentsInfo()
         }
 
+
         //再生ボタン実装
         start_button.setOnClickListener {
 
             if(picURLInfo.count() == 0 ){
-                error.text = "画像が保存されていません"
+                error.text = "ギャラリーへの許可がされていなか、画像が保存されていません"
             } else {
                 if (mTimer == null){
 
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         prev_button.setOnClickListener {
 
             if(picURLInfo.count() == 0 ){
-                error.text = "画像が保存されていません"
+                error.text = "ギャラリーへの許可がされていなか、画像が保存されていません"
             } else if (counter == 0){
                 imageView.setImageURI(picURLInfo[Nowindex])
                 Log.d("ANDROID_URI",Nowindex.toString())
@@ -125,10 +126,8 @@ class MainActivity : AppCompatActivity() {
 
         //戻るボタンが押されたときの処理
         next_button.setOnClickListener {
-
-
             if(picURLInfo.count() == 0 ){
-                error.text = "画像が保存されていません"
+                error.text = "ギャラリーへの許可がされていなか、画像が保存されていません"
             } else {
                 //Nowindexが要素数と一致したときの判定処理
                 counter += 1
@@ -185,6 +184,14 @@ class MainActivity : AppCompatActivity() {
             } while (cursor.moveToNext())
         }
         cursor.close()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("ANDROID_URI","OnResume")
+
+
+
     }
 
 
